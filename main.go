@@ -7,33 +7,62 @@ import (
 		"log"
 		"strconv"
 		"strings"
+		"encoding/json"
+		"io/ioutil"
 )
 
 var db *sql.DB = init_db()
 
-func home(w http.ResponseWriter, r *http.Request) { // (1)
-    fmt.Fprint(w, "Welcome to the HomePage!") // (2)
+type user struct {
+	Id int 
+	First_name string
+    Last_name string
+	Email string
+	Gender string
+	Age int
+}
+
+func home(w http.ResponseWriter, r *http.Request) { 
+    fmt.Fprint(w, "Welcome to the HomePage!") 
 }
 
 func showAll(w http.ResponseWriter, r *http.Request) {
 	
-	rows, err := db.Query("select id,first_name,last_name from users where id = 1")
+	rows, err := db.Query("select * from users")
 	var id int
 	var first_name string
 	var last_name string
+	var email string
+	var gender string
+	var age int
     if err != nil {
         log.Fatal(err)
     }
     defer rows.Close()
 
+	addUser := []user{}  
     for rows.Next() {
-		rows.Scan(&id,&first_name,&last_name)
-		fmt.Fprint(w,"\n"+strconv.Itoa(id)+" "+first_name+" "+last_name)
-    }
+		rows.Scan(&id,&first_name,&last_name,&email,&gender,&age)
+		
+		data := user {
+			Id : id,
+			First_name : first_name,
+			Last_name : last_name,
+			Email : email,
+			Gender : gender,
+			Age : age,
+		} 
+		addUser = append(addUser,data)
+		// fmt.Println(addUser)
+		// fmt.Fprint(w,"\n"+strconv.Itoa(id)+" "+first_name+" "+last_name)
+	}
+	
+	fmt.Println(addUser)
     err = rows.Err()
     if err != nil {
         log.Fatal(err)
 	}
+	json.NewEncoder(w).Encode(addUser)
 }
 
 func showByid(w http.ResponseWriter, r *http.Request) {
@@ -200,8 +229,17 @@ func showByage(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handleRequest() { // (3)
-	http.HandleFunc("/", home) // (4)home 
+func create(w http.ResponseWriter, r *http.Request) {
+	reqBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%s\n", reqBody)
+	// w.Write([]byte("Received a POST request\n"))
+}
+
+func handleRequest() { 
+	http.HandleFunc("/", home) 
 	http.HandleFunc("/showAll", showAll)
 	http.HandleFunc("/showByid/", showByid)
 	http.HandleFunc("/showByfirst_name/", showByfirst_name)
@@ -209,7 +247,8 @@ func handleRequest() { // (3)
 	http.HandleFunc("/showByemail/", showByemail)
 	http.HandleFunc("/showBygender/", showBygender)
 	http.HandleFunc("/showByage/", showByage)
-    http.ListenAndServe(":8080", nil) // (5)
+	http.HandleFunc("/create", create)
+    http.ListenAndServe(":8000", nil) 
 }
 
 func init_db() *sql.DB {

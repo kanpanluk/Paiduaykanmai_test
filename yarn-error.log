@@ -1,0 +1,26 @@
+Arguments: 
+  /usr/bin/node /usr/bin/yarn config get registry
+
+PATH: 
+  /mnt/e/code/go/src/github.com/kanpanluk/go-api/node_modules/.bin:/mnt/e/code/go/src/github.com/kanpanluk/node_modules/.bin:/mnt/e/code/go/src/github.com/node_modules/.bin:/mnt/e/code/go/src/node_modules/.bin:/mnt/e/code/go/node_modules/.bin:/mnt/e/code/node_modules/.bin:/mnt/e/node_modules/.bin:/mnt/node_modules/.bin:/node_modules/.bin:/usr/bin:/home/jokopopo/.rbenv/plugins/ruby-build/bin:/home/jokopopo/.rbenv/shims:/home/jokopopo/.rbenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/mnt/c/Program Files (x86)/Common Files/Oracle/Java/javapath_target_253990203:/mnt/c/Program Files/Python37/Scripts:/mnt/c/Program Files/Python37:/mnt/c/Windows/System32:/mnt/c/Windows:/mnt/c/Windows/System32/wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0:/mnt/c/Windows/System32/OpenSSH:/mnt/c/Program Files/NVIDIA Corporation/NVIDIA NvDLISR:/mnt/c/Program Files (x86)/NVIDIA Corporation/PhysX/Common:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/Java/jdk1.8.0_201/bin:/mnt/c/Users/WiNNER/Anaconda3:/mnt/c/Users/WiNNER/Anaconda3/Library/mingw-w64/bin:/mnt/c/Users/WiNNER/Anaconda3/Library/bin:/mnt/c/Users/WiNNER/Anaconda3/Scripts:/mnt/c/Users/WiNNER/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/WiNNER/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Program Files/JetBrains/PyCharm Community Edition 2018.3.5/bin:/mnt/c/Program Files/Java/jdk1.8.0_201/bin:/mnt/c/Program Files/JetBrains/IntelliJ IDEA Community Edition 2019.1/bin:/snap/bin
+
+Yarn version: 
+  1.17.3
+
+Node version: 
+  8.16.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: EACCES: permission denied, scandir '/home/jokopopo/.config/yarn/link'
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
