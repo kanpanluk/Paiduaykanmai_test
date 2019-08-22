@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    
           <div>
             <label><h1></h1></label>
           </div>
@@ -8,7 +7,6 @@
           <!-- Modal -->
           <div class="modal fade" id="createModal" role="dialog">
             <div class="modal-dialog">
-            
               <!-- Modal content-->
               <div class="modal-content">
                 <div class="modal-header">
@@ -29,7 +27,6 @@
                   </button>
                 </div>
               </div>
-              
             </div>
           </div>
     <table class="table" align="center">
@@ -51,7 +48,6 @@
           </tr>
             <div class="modal fade" id="editModal" role="dialog">
                 <div class="modal-dialog">
-                
                   <!-- Modal content-->
                   <div class="modal-content">
                     <div class="modal-header">
@@ -72,15 +68,9 @@
                       </button>
                     </div>
                   </div>
-                  
                 </div>
               </div>
-              
-          
         </table>
-
-        
-
   </div>
 </template>
 
