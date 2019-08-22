@@ -12,15 +12,16 @@
               <!-- Modal content-->
               <div class="modal-content">
                 <div class="modal-header">
+                  <h4>Fill Form</h4>
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 >Fill Form</h4>
                 </div>
                 <div class="modal-body">
-                  <input v-model="first_name" type="text" class="form-control" id="fnameinput" placeholder="first name">
-                  <input v-model="last_name" type="text" class="form-control" id="lnameinput" placeholder="lasr name">
-                  <input v-model="email" type="text" class="form-control" id="emailinput" placeholder="e-mail">
-                  <input v-model="gender" type="text" class="form-control" id="genderinput" placeholder="gender">
-                  <input v-model="age" type="text" class="form-control" id="ageinput" placeholder="age">
+                  <input v-model="id" type="text" class="form-control" id="id" placeholder="id">
+                  <input v-model="first_name" type="text" class="form-control" id="first_name" placeholder="first name">
+                  <input v-model="last_name" type="text" class="form-control" id="last_name" placeholder="last name">
+                  <input v-model="email" type="text" class="form-control" id="email" placeholder="e-mail">
+                  <input v-model="gender" type="text" class="form-control" id="gender" placeholder="gender">
+                  <input v-model="age" type="text" class="form-control" id="age" placeholder="age">
                 </div>
                 <div class="modal-footer">
                    <button v-on:click="create()" data-dismiss="modal" type="submit" class="btn btn-success btn-block mt-3">
@@ -31,8 +32,6 @@
               
             </div>
           </div>
-   
-    <div></div>
     <table class="table" align="center">
             <tr>
               <th scope="col">id</th>
@@ -43,25 +42,29 @@
               <th scope="col">age</th>
               <th scope="col">modify</th>
             </tr>
-          <tr v-for="user in users" v-bind:key="user.id">
-            <td v-for="value in user" v-bind:key="value.id">{{value}}</td>
+          <tr v-for="(user) in users" v-bind:key="user.id">
+            <td v-for="(value) in user" v-bind:key="value.id">{{value}}</td>
             <td>
-              <button v-on:click="edit(users)" data-toggle = "modal" data-target="#editModal" class="btn btn-info" >Edit</button>
-              <div class="modal fade" id="editModal" role="dialog">
+              <button v-on:click="edit(user)" data-toggle = "modal" data-target="#editModal" class="btn btn-secondary" >Edit</button>
+              <button v-on:click="del(user.Id)" class="btn btn-danger">Delete</button>
+            </td>
+          </tr>
+            <div class="modal fade" id="editModal" role="dialog">
                 <div class="modal-dialog">
                 
                   <!-- Modal content-->
                   <div class="modal-content">
                     <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
                       <h4 >Edited</h4>
+                      <button type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
-                      <input v-model="first_name" type="text" class="form-control" id="fnameinput" placeholder="first name">
-                      <input v-model="last_name" type="text" class="form-control" id="lnameinput" placeholder="lasr name">
-                      <input v-model="email" type="text" class="form-control" id="emailinput" placeholder="e-mail">
-                      <input v-model="gender" type="text" class="form-control" id="genderinput" placeholder="gender">
-                      <input v-model="age" type="text" class="form-control" id="ageinput" placeholder="age">
+                      <input v-model="id" type="text" class="form-control" id="id" placeholder="id">
+                      <input v-model="first_name" type="text" class="form-control" id="first_name" placeholder="first name">
+                      <input v-model="last_name" type="text" class="form-control" id="last_name" placeholder="last name">
+                      <input v-model="email" type="text" class="form-control" id="email" placeholder="e-mail">
+                      <input v-model="gender" type="text" class="form-control" id="gender" placeholder="gender">
+                      <input v-model="age" type="text" class="form-control" id="age" placeholder="age">
                     </div>
                     <div class="modal-footer">
                       <button v-on:click="update()" data-dismiss="modal" type="submit" class="btn btn-success btn-block mt-3">
@@ -72,9 +75,8 @@
                   
                 </div>
               </div>
-              <button v-on:click="del(user[0])" class="btn btn-danger">Delete</button>
-            </td>
-          </tr>
+              
+          
         </table>
 
         
@@ -94,7 +96,6 @@ export default {
       email: '',
       gender: '',
       age: '',
-      isEdit: false
     }
   },mounted(){
     this.showAll()
@@ -108,8 +109,19 @@ export default {
           // console.log(this.users);
         })
       },
+      del: function(id){
+        axios.get(`http://localhost:8000/delete/${id}`)
+        .then((response) => {
+          alert(id);
+          this.showAll()
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      },
       create: function() {
         const params = new URLSearchParams();
+        params.append('id',this.id);
         params.append('first_name', this.first_name);
         params.append('last_name', this.last_name);
         params.append('email', this.email);
@@ -117,32 +129,33 @@ export default {
         params.append('age', this.age);
         axios.post('http://localhost:8000/create',params)
         .then((response) => {
+          this.id = ''
           this.first_name = ''
           this.last_name =''
           this.email = ''
           this.gender = ''
           this.age = ''
-          // this.showAll()
-          console.log(response)
+          this.showAll()
+          // console.log(response)
         })
         .catch(err => {
           console.log(err)
         })  
       },
-      edit(user){
-        alert(this.isEdit)
-        this.id = user[0]
-        this.first_name = user[1]
-        this.last_name = user[2]
-        this.email = user[3]
-        this.gender = user[4]
-        this.age = user[5]
-        this.isEdit = true
+      edit: function(user){
+        alert("Edit")
+        alert(user)
+        this.id = user.Id
+        this.first_name = user.First_name
+        this.last_name = user.Last_name
+        this.email = user.Email
+        this.gender = user.Gender
+        this.age = user.Age
         window.scrollTo(0, 0);
-        alert(this.isEdit)
       },
       update: function() {
         const params = new URLSearchParams();
+        params.append('id', this.id);
         params.append('first_name', this.first_name);
         params.append('last_name', this.last_name);
         params.append('email', this.email);
@@ -150,28 +163,18 @@ export default {
         params.append('age', this.age);
         axios.post('http://localhost:8000/update',params)
         .then((response) => {
+          this.id = ''
           this.first_name = ''
-          this.last_name =''
+          this.last_name = ''
           this.email = ''
           this.gender = ''
           this.age = ''
-          // this.showAll()
+          this.showAll()
           console.log(response)
         })
         .catch(err => {
           console.log(err)
         })  
-      },
-      del: function(id){
-      axios.get(`http://localhost:8000/delete/${id}`)
-      .then((response) => {
-          this.showAll()
-          alert(id);
-          
-        })
-        .catch(err => {
-          console.log(err)
-        })
       }
   },
   name: 'app'
