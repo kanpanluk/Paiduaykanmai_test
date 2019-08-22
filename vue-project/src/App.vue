@@ -56,7 +56,7 @@
                   <div class="modal-content">
                     <div class="modal-header">
                       <h4 >Edited</h4>
-                      <button type="button" class="close" data-dismiss="modal">&times;</button>
+                      <button v-on:click="clearForm()" type="button" class="close" data-dismiss="modal">&times;</button>
                     </div>
                     <div class="modal-body">
                       <input v-model="id" type="text" class="form-control" id="id" placeholder="id">
@@ -144,7 +144,6 @@ export default {
       },
       edit: function(user){
         alert("Edit")
-        alert(user)
         this.id = user.Id
         this.first_name = user.First_name
         this.last_name = user.Last_name
@@ -175,6 +174,15 @@ export default {
         .catch(err => {
           console.log(err)
         })  
+      },
+      clearForm: function(){
+        this.id = ''
+        this.first_name = ''
+        this.last_name = ''
+        this.email = ''
+        this.gender = ''
+        this.age = ''
+        window.scrollTo(0, 0);
       }
   },
   name: 'app'
