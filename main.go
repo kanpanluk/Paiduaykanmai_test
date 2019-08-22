@@ -9,12 +9,13 @@ import (
 		"strings"
 		"encoding/json"
 		"io/ioutil"
+		
 )
 
 var db *sql.DB = init_db()
 
 type user struct {
-	Id int 
+	Id int
 	First_name string
     Last_name string
 	Email string
@@ -28,7 +29,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 
 func showAll(w http.ResponseWriter, r *http.Request) {
 	
-	rows, err := db.Query("select * from users")
+	rows, err := db.Query("select id,first_name,last_name,email,gender,age from users")
 	var id int
 	var first_name string
 	var last_name string
@@ -57,7 +58,7 @@ func showAll(w http.ResponseWriter, r *http.Request) {
 		// fmt.Fprint(w,"\n"+strconv.Itoa(id)+" "+first_name+" "+last_name)
 	}
 	
-	fmt.Println(addUser)
+	// fmt.Println(addUser)
     err = rows.Err()
     if err != nil {
         log.Fatal(err)
@@ -68,8 +69,7 @@ func showAll(w http.ResponseWriter, r *http.Request) {
 func showByid(w http.ResponseWriter, r *http.Request) {
 	find_id := strings.Split(r.URL.Path[1:],"/")[1]
 
-	rows, err := db.Query("select * from users where id = " + find_id)
-	var id int
+	rows, err := db.Query("select first_name,last_name,email,gender,age from users where id = " + find_id)
 	var first_name string
 	var last_name string
 	var email string
@@ -81,9 +81,9 @@ func showByid(w http.ResponseWriter, r *http.Request) {
     defer rows.Close()
 
     for rows.Next() {
-		rows.Scan(&id,&first_name,&last_name,&email,&gender,&age)
-		fmt.Fprint(w,strconv.Itoa(id)+" "+first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age))
-		fmt.Println(strconv.Itoa(id)+" "+first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age))
+		rows.Scan(&first_name,&last_name,&email,&gender,&age)
+		fmt.Fprint(w,first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age))
+		fmt.Println(first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age))
     }
     err = rows.Err()
     if err != nil {
@@ -94,8 +94,8 @@ func showByid(w http.ResponseWriter, r *http.Request) {
 func showByfirst_name(w http.ResponseWriter, r *http.Request) {
 	find_first_name := strings.Split(r.URL.Path[1:],"/")[1]
 	fmt.Println(find_first_name)
-	rows, err := db.Query("select * from users where first_name = " + "'" + find_first_name + "'")
-	var (id int
+	rows, err := db.Query("select first_name,last_name,email,gender,age  from users where first_name = " + "'" + find_first_name + "'")
+	var (
 	first_name string
 	last_name string
 	email string
@@ -107,9 +107,9 @@ func showByfirst_name(w http.ResponseWriter, r *http.Request) {
     defer rows.Close()
 
     for rows.Next() {
-		rows.Scan(&id,&first_name,&last_name,&email,&gender,&age)
-		fmt.Fprint(w,strconv.Itoa(id)+" "+first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age)+"\n")
-		fmt.Println(strconv.Itoa(id)+" "+first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age))
+		rows.Scan(&first_name,&last_name,&email,&gender,&age)
+		fmt.Fprint(w,first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age)+"\n")
+		fmt.Println(first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age))
     }
     err = rows.Err()
     if err != nil {
@@ -120,8 +120,8 @@ func showByfirst_name(w http.ResponseWriter, r *http.Request) {
 func showBylast_name(w http.ResponseWriter, r *http.Request) {
 	find_last_name := strings.Split(r.URL.Path[1:],"/")[1]
 	fmt.Println(find_last_name)
-	rows, err := db.Query("select * from users where last_name = " + "'" + find_last_name + "'")
-	var (id int
+	rows, err := db.Query("select first_name,last_name,email,gender,age  from users where last_name = " + "'" + find_last_name + "'")
+	var (
 	first_name string
 	last_name string
 	email string
@@ -133,9 +133,9 @@ func showBylast_name(w http.ResponseWriter, r *http.Request) {
     defer rows.Close()
 
     for rows.Next() {
-		rows.Scan(&id,&first_name,&last_name,&email,&gender,&age)
-		fmt.Fprint(w,strconv.Itoa(id)+" "+first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age)+"\n")
-		fmt.Println(strconv.Itoa(id)+" "+first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age))
+		rows.Scan(&first_name,&last_name,&email,&gender,&age)
+		fmt.Fprint(w,first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age)+"\n")
+		fmt.Println(first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age))
     }
     err = rows.Err()
     if err != nil {
@@ -146,8 +146,8 @@ func showBylast_name(w http.ResponseWriter, r *http.Request) {
 func showByemail(w http.ResponseWriter, r *http.Request) {
 	find_email := strings.Split(r.URL.Path[1:],"/")[1]
 	fmt.Println(find_email)
-	rows, err := db.Query("select * from users where email = " + "'" + find_email + "'")
-	var (id int
+	rows, err := db.Query("select first_name,last_name,email,gender,age  from users where email = " + "'" + find_email + "'")
+	var (
 	first_name string
 	last_name string
 	email string
@@ -159,9 +159,9 @@ func showByemail(w http.ResponseWriter, r *http.Request) {
     defer rows.Close()
 
     for rows.Next() {
-		rows.Scan(&id,&first_name,&last_name,&email,&gender,&age)
-		fmt.Fprint(w,strconv.Itoa(id)+" "+first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age)+"\n")
-		fmt.Println(strconv.Itoa(id)+" "+first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age))
+		rows.Scan(&first_name,&last_name,&email,&gender,&age)
+		fmt.Fprint(w,first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age)+"\n")
+		fmt.Println(first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age))
     }
     err = rows.Err()
     if err != nil {
@@ -172,8 +172,8 @@ func showByemail(w http.ResponseWriter, r *http.Request) {
 func showBygender(w http.ResponseWriter, r *http.Request) {
 	find_gender := strings.Split(r.URL.Path[1:],"/")[1]
 	fmt.Println(find_gender)
-	rows, err := db.Query("select * from users where gender = " + "'" + find_gender + "'")
-	var (id int
+	rows, err := db.Query("select first_name,last_name,email,gender,age  from users where gender = " + "'" + find_gender + "'")
+	var (
 	first_name string
 	last_name string
 	email string
@@ -185,9 +185,9 @@ func showBygender(w http.ResponseWriter, r *http.Request) {
     defer rows.Close()
 
     for rows.Next() {
-		rows.Scan(&id,&first_name,&last_name,&email,&gender,&age)
-		fmt.Fprint(w,strconv.Itoa(id)+" "+first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age)+"\n")
-		fmt.Println(strconv.Itoa(id)+" "+first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age))
+		rows.Scan(&first_name,&last_name,&email,&gender,&age)
+		fmt.Fprint(w,first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age)+"\n")
+		fmt.Println(first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age))
     }
     err = rows.Err()
     if err != nil {
@@ -206,8 +206,8 @@ func showByage(w http.ResponseWriter, r *http.Request) {
 		find_age_max = strings.Split(find_age,"-")[1:][0]
 	}
 
-	rows, err := db.Query("select * from users where age >= " + find_age_min + " and age <= " + find_age_max)
-	var id int
+	rows, err := db.Query("select first_name,last_name,email,gender,age  from users where age >= " + find_age_min + " and age <= " + find_age_max)
+	
 	var first_name string
 	var last_name string
 	var email string
@@ -219,9 +219,9 @@ func showByage(w http.ResponseWriter, r *http.Request) {
     defer rows.Close()
 
     for rows.Next() {
-		rows.Scan(&id,&first_name,&last_name,&email,&gender,&age)
-		fmt.Fprint(w,strconv.Itoa(id)+" "+first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age)+"\n")
-		fmt.Println(strconv.Itoa(id)+" "+first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age))
+		rows.Scan(&first_name,&last_name,&email,&gender,&age)
+		fmt.Fprint(w,first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age)+"\n")
+		fmt.Println(first_name+" "+last_name+" "+email+" "+gender+" "+strconv.Itoa(age))
     }
     err = rows.Err()
     if err != nil {
@@ -230,11 +230,53 @@ func showByage(w http.ResponseWriter, r *http.Request) {
 }
 
 func create(w http.ResponseWriter, r *http.Request) {
-	reqBody, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Printf("%s\n", reqBody)
+	rBody , _ := ioutil.ReadAll(r.Body)
+	
+	str := string(rBody)
+	data := strings.Split(str,"&")
+	first_name := strings.Split(data[0],"=")[1]
+	last_name := strings.Split(data[1],"=")[1]
+	email := strings.Split(data[2],"=")[1]
+	gender := strings.Split(data[3],"=")[1]
+	age,_ := strconv.Atoi(strings.Split(data[4],"=")[1])
+	fmt.Println(first_name,last_name,email,gender,age)
+	
+	result, _ := db.Exec(
+		"INSERT INTO users ('first_name','last_name','email','gender','age') VALUES (?,?,?,?,?)",
+		first_name,last_name,email,gender,age)
+	fmt.Println(result.LastInsertId())
+	fmt.Println(result.RowsAffected())
+	// w.Write([]byte("Received a POST request\n"))
+}
+
+func update(w http.ResponseWriter, r *http.Request) {
+	rBody , _ := ioutil.ReadAll(r.Body)
+	
+	str := string(rBody)
+	data := strings.Split(str,"&")
+	first_name := strings.Split(data[0],"=")[1]
+	last_name := strings.Split(data[1],"=")[1]
+	email := strings.Split(data[2],"=")[1]
+	gender := strings.Split(data[3],"=")[1]
+	age,_ := strconv.Atoi(strings.Split(data[4],"=")[1])
+	// fmt.Println(first_name,last_name,email,gender,age)
+	
+	result, _ := db.Exec(
+		"INSERT INTO users ('first_name','last_name','email','gender','age') VALUES (?,?,?,?,?)",
+		first_name,last_name,email,gender,age)
+	fmt.Println(result.LastInsertId())
+	fmt.Println(result.RowsAffected())
+	// w.Write([]byte("Received a POST request\n"))
+}
+
+func delete(w http.ResponseWriter, r *http.Request) {
+	del_id := strings.Split(r.URL.Path[1:],"/")[1]
+	fmt.Println(del_id)
+	fmt.Println("DEL")
+	result, _ := db.Exec(
+		"DELETE FROM users WHERE id=?",
+		del_id)
+	fmt.Println(result.RowsAffected())
 	// w.Write([]byte("Received a POST request\n"))
 }
 
@@ -248,6 +290,8 @@ func handleRequest() {
 	http.HandleFunc("/showBygender/", showBygender)
 	http.HandleFunc("/showByage/", showByage)
 	http.HandleFunc("/create", create)
+	http.HandleFunc("/update", update)
+	http.HandleFunc("/delete/", delete)
     http.ListenAndServe(":8000", nil) 
 }
 
